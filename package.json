@@ -1,0 +1,20 @@
+{
+  "name": "nodejs-docx",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "docxtemplater": "^3.39.2",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "libreoffice-convert": "^1.4.1",
+    "nodemon": "^3.0.1",
+    "pizzip": "^3.1.4"
+  }
+}
