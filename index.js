@@ -9,7 +9,7 @@ const port = 3000
 app.use(compression()); // Compress all routes
 //to use public files; css, js, images...inside public folder
 app.use(express.static('public'));
-// app.use(express.static('contracts'));
+app.use(express.static('tmp'));
 app.set('view engine', 'ejs');
 
 // app.use(bodyParser.json()) // for parsing application/json
@@ -321,5 +321,24 @@ app.get('/download-combined-proposal/:filename', (req, res) => {
 
 });
 
+
+
+app.get('/pdf-proposal/:docxfilename', async(req, res) => {
+
+    const filename = req.params.docxfilename;
+    const ext = '.pdf'
+    const inputPath = path.join(__dirname, '/proposals/' + filename);
+    const outputPath = path.join(__dirname, `/tmp/${filename}${ext}`);
+
+    const docxBuf = await fss.readFile(inputPath);
+    // Convert it to pdf format with undefined filter (see Libreoffice docs about filter)
+    let pdfBuf = await libre.convertAsync(docxBuf, ext, undefined);
+    // Here in done you have pdf file which you can save or transfer in another stream
+    await fss.writeFile(outputPath, pdfBuf);
+
+    return res.status(200).json({ filename: filename + ext });
+
+
+});   
 
 app.listen(port, () => { console.log('App Started at port ' + port) });
