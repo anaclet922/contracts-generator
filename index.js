@@ -52,6 +52,8 @@ app.post("/generate-contract", async function (req, res) {
   //   path.resolve(__dirname, "docx-templates/template-cow-" + lang + ".docx"),
   //   "binary"
   // );
+  var content;
+
 
   if (type == "crop") {
     templatePath = path.resolve(
@@ -94,10 +96,12 @@ app.post("/generate-contract", async function (req, res) {
     );
   } else if (type == "accident") {
     content = fs.readFileSync(
-      path.resolve(
-        __dirname,
-        "/docx-templates/template-accident-" + lang + ".docx"
-      ),
+      path.resolve(__dirname, "docx-templates/template-accident-" + lang + ".docx"),
+      "binary"
+    );
+  } else if (type == "bboxx") {
+    content = fs.readFileSync(
+      path.resolve(__dirname, "docx-templates/template-bboxx-" + lang + ".docx"),
       "binary"
     );
   }
