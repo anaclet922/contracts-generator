@@ -13,7 +13,7 @@ app.set("view engine", "ejs");
 
 // app.use(bodyParser.json()) // for parsing application/json
 // app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 const PizZip = require("pizzip");
@@ -52,8 +52,9 @@ app.post("/generate-contract", async function (req, res) {
   //   path.resolve(__dirname, "docx-templates/template-cow-" + lang + ".docx"),
   //   "binary"
   // );
-  var content;
+  let content;
 
+  let templateFile = "";
 
   if (type == "crop") {
     templatePath = path.resolve(
@@ -96,12 +97,18 @@ app.post("/generate-contract", async function (req, res) {
     );
   } else if (type == "accident") {
     content = fs.readFileSync(
-      path.resolve(__dirname, "docx-templates/template-accident-" + lang + ".docx"),
+      path.resolve(
+        __dirname,
+        "docx-templates/template-accident-" + lang + ".docx"
+      ),
       "binary"
     );
   } else if (type == "bboxx") {
     content = fs.readFileSync(
-      path.resolve(__dirname, "docx-templates/template-bboxx-" + lang + ".docx"),
+      path.resolve(
+        __dirname,
+        "docx-templates/template-bboxx-" + lang + ".docx"
+      ),
       "binary"
     );
   }
