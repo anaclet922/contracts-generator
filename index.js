@@ -56,61 +56,45 @@ app.post("/generate-contract", async function (req, res) {
 
   let templateFile = "";
 
-  if (type == "crop") {
-    templatePath = path.resolve(
+  if (type === "crop") {
+    templateFile = `template-${lang}.docx`;
+  } else if (type === "chicken") {
+    templateFile = `template-chicken-${lang}.docx`;
+  } else if (type === "porc") {
+    templateFile = `template-porc-${lang}.docx`;
+  } else if (type === "cow") {
+    templateFile = `template-cow-${lang}.docx`;
+  } else if (type === "student") {
+    templateFile = `template-student-${lang}.docx`;
+  } else if (type === "accident") {
+    templateFile = `template-accident-${lang}.docx`;
+  } else if (type === "bboxx") {
+    templateFile = `template-bboxx-${lang}.docx`;
+  } else if (type === "umuryango") {
+    templateFile = `template-umuryango-${lang}.docx`;
+  } else if (type === "recu_ancaissement") {
+    templateFile = `template-recu_ancaissement-${lang}.docx`;
+  }
+
+  if (templateFile) {
+    const templatePath = path.resolve(
       __dirname,
-      "docx-templates/template-" + lang + ".docx"
+      "docx-templates",
+      templateFile
     );
     // Check if the file exists
     if (!fs.existsSync(templatePath)) {
-      let output = {
-        filename: "",
-      };
-      res.status(200).json(output);
+      return res.status(404).json({
+        error: "template-not-found",
+      });
     }
+
+    // File exists, read it
     content = fs.readFileSync(templatePath, "binary");
-  } else if (type == "chicken") {
-    content = fs.readFileSync(
-      path.resolve(
-        __dirname,
-        "docx-templates/template-chicken-" + lang + ".docx"
-      ),
-      "binary"
-    );
-  } else if (type == "porc") {
-    content = fs.readFileSync(
-      path.resolve(__dirname, "docx-templates/template-porc-" + lang + ".docx"),
-      "binary"
-    );
-  } else if (type == "cow") {
-    content = fs.readFileSync(
-      path.resolve(__dirname, "docx-templates/template-cow-" + lang + ".docx"),
-      "binary"
-    );
-  } else if (type == "student") {
-    content = fs.readFileSync(
-      path.resolve(
-        __dirname,
-        "docx-templates/template-student-" + lang + ".docx"
-      ),
-      "binary"
-    );
-  } else if (type == "accident") {
-    content = fs.readFileSync(
-      path.resolve(
-        __dirname,
-        "docx-templates/template-accident-" + lang + ".docx"
-      ),
-      "binary"
-    );
-  } else if (type == "bboxx") {
-    content = fs.readFileSync(
-      path.resolve(
-        __dirname,
-        "docx-templates/template-bboxx-" + lang + ".docx"
-      ),
-      "binary"
-    );
+  } else {
+    return res.status(400).json({
+      error: "invalid-type",
+    });
   }
 
   const zip = new PizZip(content);
